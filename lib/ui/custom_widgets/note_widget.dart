@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 class NoteWidget extends StatelessWidget {
-  const NoteWidget({Key? key, this.title, this.content, this.date, this.folderTag, this.color, this.ontapForPin}) : super(key: key);
+  const NoteWidget({Key? key, this.title, this.content, this.date, this.folderTag, this.color, this.ontapForPin, this.ontap}) : super(key: key);
   final String? date;
   final String? title;
   final String? content;
   final String? folderTag;
   final Color? color;
   final void Function()? ontapForPin;
+  final void Function()? ontap;
 
   @override
   Widget build(BuildContext context) {
@@ -25,49 +26,52 @@ class NoteWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
           child: Stack(
             children: [
-              Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          '$date',
-                          style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 11.5,
-                              fontStyle: FontStyle.italic),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 4,
-                    ),
-                    Text(
-                      title.toString(),
-                      style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 11.2,
-                          fontWeight: FontWeight.bold),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                    ),
-                    SizedBox(
-                      height: 4,
-                    ),
-                    Expanded(
-                      child: Text(
-                        content ?? '# To add custom fonts to your application, add a fonts section here, in this flutter section. Each entry in this list should have a family key with the font family name, and a fonts key with a list giving the asset and other descriptors for the font. For example:',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 10.8,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 5,
+              InkWell(
+                onTap: ontap,
+                child: Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            '$date',
+                            style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 11.5,
+                                fontStyle: FontStyle.italic),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
+                      SizedBox(
+                        height: 4,
+                      ),
+                      Text(
+                        title.toString(),
+                        style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 11.2,
+                            fontWeight: FontWeight.bold),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                      ),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      Expanded(
+                        child: Text(
+                          content ?? '# To add custom fonts to your application, add a fonts section here, in this flutter section. Each entry in this list should have a family key with the font family name, and a fonts key with a list giving the asset and other descriptors for the font. For example:',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 10.8,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 5,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Positioned(

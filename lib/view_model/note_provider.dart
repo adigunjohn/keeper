@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:keeper/model/locator.dart';
 import 'package:keeper/model/navigation_service.dart';
 import 'package:keeper/ui/data/note.dart';
+//import 'package:provider/provider.dart';
 
 final NoteModel = ChangeNotifierProvider((ref) => NoteProvider());
 
@@ -73,9 +74,11 @@ class NoteProvider extends ChangeNotifier {
   List<Note> get writeUpsNL => _writeUpsNoteList;
 
   ///for all notes
-  List<Note> get _allNote {
-    return [..._ideasNoteList, ..._toDoNoteListt, ..._writeUpsNoteList, ..._randomNoteList];
-  }
+  List<Note> _allNote = [];
+    // return [..._ideasNoteList, ..._toDoNoteListt, ..._writeUpsNoteList, ..._randomNoteList, ..._addNewNotes];
+  //}
+  // //adding new notes from new folders to the all tab
+  // List<Note> _addNewNotes= [];
 
   List<Note> get allNL => _allNote;
 
@@ -89,6 +92,7 @@ class NoteProvider extends ChangeNotifier {
      if(titleController.text.isNotEmpty && contentController.text.isNotEmpty){
        noteID++;
        list.add(newNote);
+       _allNote.add(newNote);
        print('new note added');
        notifyListeners();
        titleController.clear();
@@ -103,6 +107,15 @@ class NoteProvider extends ChangeNotifier {
      else{print('tiltle and content of new note cannot be empty');}
    }
 
+  void editNote(Note newNote, Note oldNote, List<Note> list,){
+    final index = list.indexOf(oldNote);
+    final idx = list.where((e) => e == oldNote);
+    print(index);
+    print(idx);
+    // list[index] = newNote;
+    notifyListeners();
+  }
+
   void pinNote(Note note){
      if(!pinNotes.contains(note.noteId)){
        pinNotes.add(note.noteId);
@@ -114,39 +127,83 @@ class NoteProvider extends ChangeNotifier {
      else{ print('note is already pinned');}
 
   }
+  void unpinNote(Note note){
+    if(pinNotes.contains(note.noteId)){
+      pinNotes.remove(note.noteId);
+      _pinnedNotes.remove(note);
+      print('new note unpinned');
+      //print(note.noteId);
+      notifyListeners();
+    }
+    else{ print('note is already pinned');}
 
+  }
   ///folder list stuffs
   // List<List<Note>> get _folderList {
   //   return [_toDoNoteList, _ideasNoteList];
   // }
 
   List<NoteFolders> get folderListt {
-    return [ideaFol,todoFol,randomFol,writeUpFol];
-  }
-  List<NoteFolders> get folderList {
-    return [allNoteFol,ideaFol,todoFol,randomFol,writeUpFol];
+    return [ideaFol,todoFol,randomFol,writeUpFol, ...somethingNew];
   }
 
+  List<NoteFolders> get folderList {
+    return [allNoteFol,ideaFol,todoFol,randomFol,writeUpFol, ...somethingNew];
+  }
+  List<NoteFolders> somethingNew = [];
+  // List<NoteFolders> folderListter = [
+  //   // ideaFol,todoFol,randomFol,writeUpFol,
+  // ];
+  // List<NoteFolders> folderListterr = [
+  //  // allNoteFol, ideaFol,todoFol,randomFol,writeUpFol,
+  //];
+  //List<Note> noteList = [];
+  void addNoteFolder(List<NoteFolders> list1, List<NoteFolders> list2, NoteFolders newNoteFolder,){
+   // if(titleController.text.isNotEmpty && contentController.text.isNotEmpty){
+      //noteID++;
+      //_addNewNotes.add(newNoteFolder.note);
+      list1.add(newNoteFolder);
+      list2.add(newNoteFolder);
+      print('new note folder added');
+      notifyListeners();
+      // titleController.clear();
+      // contentController.clear();
+      // locator<NavigationService>().pop();
+      // print(newNote);
+      // print(list.length);
+      // print(newNote.title);
+      // print(newNote.content);
+      // print(newNote.color);
+  //   }
+  //   else{print('tiltle and content of new note cannot be empty');}
+   }
+ // void addNoteFolderr(List<NoteFolders> list1, NoteFolders newNoteFolder){
+  //   // if(titleController.text.isNotEmpty && contentController.text.isNotEmpty){
+  //   //noteID++;
+  //   list1.add(newNoteFolder);
+  //   print('new note folder added');
+  //   notifyListeners();
+  // }
   NoteFolders get ideaFol {
     return NoteFolders(
-        folderTitle: 'Idea', color: Colors.blue,note: _ideasNoteList, length: _ideasNoteList.length);
+        folderTitle: 'Idea', color: Colors.blue,note: _ideasNoteList,);
   }
   NoteFolders get todoFol {
     return NoteFolders(
-       folderTitle: 'Todo', color: Colors.red,length: _toDoNoteListt.length,note: _toDoNoteListt);
+       folderTitle: 'Todo', color: Colors.red,note: _toDoNoteListt);
   }
   NoteFolders get writeUpFol {
     return NoteFolders(
-       folderTitle: 'Write Up', color: Colors.yellow,length: _writeUpsNoteList.length,note: _writeUpsNoteList);
+       folderTitle: 'Write Up', color: Colors.yellow,note: _writeUpsNoteList);
   }
   NoteFolders get randomFol {
     return NoteFolders(
-       folderTitle: 'Random', color: Colors.orange,length: _randomNoteList.length,note: _randomNoteList);
+       folderTitle: 'Random', color: Colors.orange,note: _randomNoteList);
   }
 
   NoteFolders get allNoteFol {
     return NoteFolders(
-        folderTitle: 'All', color: Colors.teal, note: _allNote, length: _allNote.length);
+        folderTitle: 'All', color: Colors.teal, note: _allNote,);
   }
 
 

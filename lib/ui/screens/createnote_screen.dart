@@ -5,14 +5,62 @@ import 'package:keeper/model/locator.dart';
 import 'package:keeper/model/navigation_service.dart';
 import 'package:keeper/ui/data/note.dart';
 import 'package:keeper/view_model/note_provider.dart';
+import 'package:provider/provider.dart';
 
-class CreateNoteScreen extends ConsumerWidget {
-  const CreateNoteScreen({Key? key, this.folderNameTag, this.notelist}) : super(key: key);
+class CreateNoteScreen extends ConsumerStatefulWidget {
+  CreateNoteScreen(
+      {Key? key,
+      this.navigatingFromWhere,
+      this.folderNameTag,
+      this.notelist,
+      this.color,
+      this.mainText,
+      this.time,
+      this.titleText,
+        this.noteId,})
+      : super(key: key);
   static const String id = 'CreateNoteScreen';
-  final String? folderNameTag;
-  final List<Note>? notelist;
+  String? folderNameTag;
+  List<Note>? notelist;
+  int? navigatingFromWhere;
+  //1 is navigating from homescreen
+  //2 is navigating from notescreen
+
+  Color? color;
+  String? titleText;
+  String? time;
+  String? mainText;
+  int? noteId;
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<CreateNoteScreen> createState() => _CreateNoteScreenState();
+}
+
+class _CreateNoteScreenState extends ConsumerState<CreateNoteScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.navigatingFromWhere == 1) {
+      //do something
+    } else if (widget.navigatingFromWhere == 2) {
+      //do something
+      ref.read(NoteModel.notifier).currentColor = widget.color as Color;
+      ref.read(NoteModel.notifier).pickerColor = widget.color as Color;
+      ref.read(NoteModel.notifier).contentController.text =
+          widget.mainText.toString();
+      ref.read(NoteModel.notifier).titleController.text =
+          widget.titleText.toString();
+      //ref.read(NoteModel.notifier).noteID = widget.noteId as int;
+      //       title: watch.titleController.text,
+      // content: watch.contentController.text,
+      // color: read.currentColor,
+      // noteFoldersTag: widget.folderNameTag,
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final watch = ref.watch(NoteModel);
     final read = ref.read(NoteModel.notifier);
 
@@ -33,6 +81,8 @@ class CreateNoteScreen extends ConsumerWidget {
                   GestureDetector(
                     onTap: () {
                       locator<NavigationService>().pop();
+                      read.titleController.clear();
+                      read.contentController.clear();
                     },
                     child: Icon(
                       Icons.arrow_back_ios_new_rounded,
@@ -41,7 +91,7 @@ class CreateNoteScreen extends ConsumerWidget {
                     ),
                   ),
                   Text(
-                    'New ${folderNameTag} note',
+                    'New ${widget.folderNameTag} note',
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                       fontFamily: 'Poppins',
@@ -50,18 +100,42 @@ class CreateNoteScreen extends ConsumerWidget {
                   ),
                   GestureDetector(
                     onTap: () {
-                      // read.note;
-                      read.addNote(
-                          notelist!,
+                      if (widget.navigatingFromWhere == 1) {
+                        read.addNote(
+                          widget.notelist!,
                           Note(
-                              title: watch.titleController.text,
-                              content: watch.contentController.text,
-                          color: read.currentColor,
-                          noteFoldersTag: folderNameTag,
+                            title: watch.titleController.text,
+                            content: watch.contentController.text,
+                            color: read.currentColor,
+                            noteFoldersTag: widget.folderNameTag,
                             noteId: watch.noteID,
                           ),
-                      );
-                      print('after safe notifier');
+                        );
+                        print('after safe notifier');
+                      } else if (widget.navigatingFromWhere == 2) {
+                        print(widget.notelist);
+                        print(widget.notelist!.length);
+                        //save the edited version of the note
+                        read.editNote(
+                          Note(
+                            title: watch.titleController.text,
+                            content: watch.contentController.text,
+                            color: read.currentColor,
+                            noteFoldersTag: widget.folderNameTag,
+                            noteId: widget.noteId as int,
+                          ),
+                          Note(
+                            title: widget.titleText,
+                            content: widget.mainText,
+                            color: widget.color,
+                            noteFoldersTag: widget.folderNameTag,
+                            noteId: widget.noteId as int,
+                          ),
+                          widget.notelist!,
+                        );
+                        // read.titleController.clear();
+                        // read.contentController.clear();
+                      }
                     },
                     child: Text(
                       'Save',

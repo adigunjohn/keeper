@@ -4,12 +4,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:keeper/model/locator.dart';
 import 'package:keeper/model/navigation_service.dart';
 import 'package:keeper/ui/screens/home_screen.dart';
+import 'package:keeper/view_model/note_provider.dart';
 
-class OnboardingScreen extends ConsumerWidget {
+class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({Key? key}) : super(key: key);
   static const String id = 'OnboardingScreen';
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
           child: SizedBox(
@@ -56,6 +57,16 @@ class OnboardingScreen extends ConsumerWidget {
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
                               color: Colors.yellow,
                               onPressed: () {
+                                // read.addNoteFolderr(read.folderListterr, read.allNoteFol);
+                                // read.addNoteFolder(read.folderListter, read.folderListterr, read.writeUpFol);
+                                // read.addNoteFolder(read.folderListter, read.folderListterr, read.randomFol);
+                                // read.addNoteFolder(read.folderListter, read.folderListterr, read.ideaFol);
+                                // read.addNoteFolder(read.folderListter, read.folderListterr, read.todoFol);
+                                // print('adding all folders');
+                                // print('adding all folders');
+                                // print('adding all folders');
+                                // print('adding all folders');
+                                print('going to home screen....');
                                 locator<NavigationService>().pushNamed(HomeScreen.id);
                               },
                               child: Padding(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:keeper/ui/screens/createnote_screen.dart';
 import 'package:keeper/ui/screens/home_screen.dart';
+import 'package:keeper/ui/screens/note_screen.dart';
 import 'package:keeper/ui/screens/onboarding_screen.dart';
 
 ///locator<NavigationService>().pushNamed(OTPScreen.id);
@@ -14,9 +15,14 @@ Route<RouteSettings> generateRoute(RouteSettings routeSettings) {
     case OnboardingScreen.id:
       return MaterialPageRoute(
         builder: (_) => const OnboardingScreen(),
-      );case CreateNoteScreen.id:
+      );
+      case CreateNoteScreen.id:
       return MaterialPageRoute(
         builder: (_) => CreateNoteScreen(),
+      );
+    case NoteScreen.id:
+      return MaterialPageRoute(
+        builder: (_) => NoteScreen(),
       );
     default:
       return MaterialPageRoute(

@@ -1,12 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class PinnedFolder extends StatelessWidget {
-  const PinnedFolder({Key? key, this.title, this.content, this.date, this.folderTag, this.color}) : super(key: key);
+  const PinnedFolder({Key? key, this.title, this.content, this.date, this.folderTag, this.color, this.onTap}) : super(key: key);
   final String? date;
   final String? title;
   final String? content;
   final String? folderTag;
   final Color? color;
+  final void Function()? onTap;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -37,9 +40,12 @@ class PinnedFolder extends StatelessWidget {
                               fontSize: 11.5,
                               fontStyle: FontStyle.italic),
                         ),
-                        Icon(
-                          Icons.push_pin_rounded,
-                          size: 20,
+                        GestureDetector(
+                          onTap: onTap,
+                          child: Icon(
+                            Icons.push_pin_rounded,
+                            size: 20,
+                          ),
                         ),
                       ],
                     ),
